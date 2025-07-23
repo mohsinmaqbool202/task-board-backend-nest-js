@@ -13,7 +13,7 @@ export class User {
   @Column({ length: 255, unique: true })
   email: string;
 
-  @Column({ length: 255 })
+  @Column({ length: 255, nullable: true })
   password: string;
 
   @Column({ name: 'email_verified_at', type: 'timestamp', nullable: true })
@@ -31,7 +31,7 @@ export class User {
   @Column()
   role_id: string;
 
-  @ManyToOne(() => Role, (role) => role.users, { eager: true })
+  @ManyToOne(() => Role, (role) => role.users)
   @JoinColumn({ name: 'role_id' })
   role: Role;
 

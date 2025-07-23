@@ -79,9 +79,9 @@ export class AuthService {
     if (!isPasswordValid)
       throw new UnauthorizedException('Invalid credentials');
 
-
+    const token = this.generateToken(user);
     return {
-      access_token: this.generateToken(user),
+      ...token,
       user: {
         id: user.id,
         name: user.name,
@@ -93,7 +93,7 @@ export class AuthService {
   }
 
   private generateToken(user: User): AuthTokenResponse {
-    const payload = { sub: user.id, email: user.email };
+    const payload = { id: user.id, email: user.email, role: user.role.name, organization_id: user.organization_id };
     return {
       access_token: this.jwtService.sign(payload),
     };

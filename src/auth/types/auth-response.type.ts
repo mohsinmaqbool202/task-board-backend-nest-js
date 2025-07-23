@@ -3,7 +3,7 @@ export interface AuthTokenResponse {
   }
   
   export interface AuthLoginResponse {
-    access_token: AuthTokenResponse;
+    access_token: string;
     user: {
       id: string;
       name: string;
