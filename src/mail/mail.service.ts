@@ -36,4 +36,18 @@ export class MailService {
             },
         });
     }
+
+    async sendForgotPasswordEmail(email: string, token: string) {
+        const frontendUrl = this.configService.get<string>('FRONTEND_URL');
+        const forgotPasswordUrl = `${frontendUrl}/auth/reset-password?token=${token}`;
+
+        await this.mailerService.sendMail({
+            to: email,
+            subject: 'Forgot Password',
+            template: './forgot-password',
+            context: {
+                forgotPasswordUrl,
+            },
+        });
+    }
 }

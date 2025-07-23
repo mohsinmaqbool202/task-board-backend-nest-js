@@ -11,4 +11,5 @@ export const Messages = {
   verified: () => 'Your email has been verified successfully!',
   loggedIn: () => `You are loggedIn successfully!`,
   invitationSent: () => `Invitation sent successfully!`,
+  forgotPasswordSent: () => `Forgot password email sent successfully!`,
 };

@@ -1,7 +1,7 @@
 import { IsString, MinLength,IsNotEmpty } from 'class-validator';
 import { Match } from 'src/common/validators/match.decorator';
 
-export class AcceptInvitationDto {
+export class SetPasswordDto {
   @IsString()
   @IsNotEmpty()
   token: string;

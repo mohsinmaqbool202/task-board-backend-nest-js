@@ -6,7 +6,8 @@ import { Messages } from 'src/common/messages';
 import { ApiResponse } from 'src/common/types/api-response.type';
 import { jsonApiResponse } from 'src/common/helpers/json-api-response.helper';
 import { verifyEmailDto } from './dto/verify-email.dto';
-import { AcceptInvitationDto } from './dto/accept-invitation.dto';
+import { SetPasswordDto } from './dto/set-password.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -24,10 +25,16 @@ export class AuthController {
     return jsonApiResponse(true, Messages.verified());
   }
 
-  @Post('accept-invitation')
-  async acceptInvitation(@Body() dto: AcceptInvitationDto): Promise<ApiResponse> {
-    await this.authService.acceptInvitation(dto);
-    return jsonApiResponse(true, null);
+  @Post('forgot-password')
+  async sendForgotPasswordEmail(@Body() dto: ForgotPasswordDto): Promise<ApiResponse> {
+    await this.authService.sendForgotPasswordEmail(dto);
+    return jsonApiResponse(true, Messages.forgotPasswordSent());
+  }
+
+  @Post('set-password')
+  async setPassword(@Body() dto: SetPasswordDto): Promise<ApiResponse> {
+    await this.authService.setPassword(dto);
+    return jsonApiResponse(true, Messages.updated('password'));
   }
 
   @Post('login')

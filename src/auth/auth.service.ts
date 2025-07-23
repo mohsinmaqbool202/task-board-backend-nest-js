@@ -16,7 +16,8 @@ import {
 import { verifyEmailDto } from './dto/verify-email.dto';
 import { AuthLoginResponse, AuthTokenResponse } from './types/auth-response.type';
 import { User } from 'src/typeorm/entities/user.entity';
-import { AcceptInvitationDto } from './dto/accept-invitation.dto';
+import { ForgotPasswordDto } from './dto/forgot-password.dto';
+import { SetPasswordDto } from './dto/set-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -67,7 +68,7 @@ export class AuthService {
     });
   }
 
-  async acceptInvitation(dto: AcceptInvitationDto): Promise<void> {
+  async setPassword(dto: SetPasswordDto): Promise<void> {
     const payload = this.jwtService.verify(dto.token); 
 
     const user = await this.usersService.findOne(payload.sub);
@@ -79,6 +80,18 @@ export class AuthService {
       password: hashedPassword,
       emailVerifiedAt: new Date(),
     });
+  }
+
+  async sendForgotPasswordEmail(dto: ForgotPasswordDto): Promise<void> {
+    const user = await this.usersService.findByEmail(dto.email);
+    if (!user) throw new NotFoundException('User not found');
+
+    const forgotPasswordToken = this.jwtService.sign(
+      { sub: user.id, email: user.email },
+      { expiresIn: '1d' }
+    );
+
+    await this.mailService.sendForgotPasswordEmail(user.email, forgotPasswordToken);
   }
 
   async login(dto: LoginDto): Promise<AuthLoginResponse> {
