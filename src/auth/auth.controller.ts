@@ -6,6 +6,7 @@ import { Messages } from 'src/common/messages';
 import { ApiResponse } from 'src/common/types/api-response.type';
 import { jsonApiResponse } from 'src/common/helpers/json-api-response.helper';
 import { verifyEmailDto } from './dto/verify-email.dto';
+import { AcceptInvitationDto } from './dto/accept-invitation.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -21,6 +22,12 @@ export class AuthController {
   async verifyEmail(@Body() dto: verifyEmailDto): Promise<ApiResponse> {
     await this.authService.verifyEmail(dto);
     return jsonApiResponse(true, Messages.verified());
+  }
+
+  @Post('accept-invitation')
+  async acceptInvitation(@Body() dto: AcceptInvitationDto): Promise<ApiResponse> {
+    await this.authService.acceptInvitation(dto);
+    return jsonApiResponse(true, null);
   }
 
   @Post('login')

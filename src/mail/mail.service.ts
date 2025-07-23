@@ -22,4 +22,18 @@ export class MailService {
             },
         });
     }
+
+    async sendInvitationEmail(email: string, token: string) {
+        const frontendUrl = this.configService.get<string>('FRONTEND_URL');
+        const invitationUrl = `${frontendUrl}/auth/set-password?token=${token}`;
+
+        await this.mailerService.sendMail({
+            to: email,
+            subject: 'You are invited to join TaskBoard',
+            template: './invitation',
+            context: {
+                invitationUrl,
+            },
+        });
+    }
 }

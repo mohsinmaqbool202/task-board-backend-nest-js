@@ -16,6 +16,7 @@ import {
 import { verifyEmailDto } from './dto/verify-email.dto';
 import { AuthLoginResponse, AuthTokenResponse } from './types/auth-response.type';
 import { User } from 'src/typeorm/entities/user.entity';
+import { AcceptInvitationDto } from './dto/accept-invitation.dto';
 
 @Injectable()
 export class AuthService {
@@ -66,8 +67,23 @@ export class AuthService {
     });
   }
 
+  async acceptInvitation(dto: AcceptInvitationDto): Promise<void> {
+    const payload = this.jwtService.verify(dto.token); 
+
+    const user = await this.usersService.findOne(payload.sub);
+    if (!user) throw new NotFoundException('User not found');
+
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+
+    await this.usersService.update(user.id, {
+      password: hashedPassword,
+      emailVerifiedAt: new Date(),
+    });
+  }
+
   async login(dto: LoginDto): Promise<AuthLoginResponse> {
     const user = await this.usersService.findByEmail(dto.email);
+    console.log('user', user);
 
     if (!user)
       throw new UnauthorizedException('Invalid credentials');

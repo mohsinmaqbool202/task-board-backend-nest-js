@@ -86,4 +86,10 @@ export class UserController {
         await this.usersService.remove(id);
         return jsonApiResponse(true, Messages.deleted('User'));
     }
+
+    @Get(':id/send-invitation')
+    async sendInvitation(@Param('id') userId: string): Promise<ApiResponse<void>> {
+        await this.usersService.sendInvitation(userId);
+        return jsonApiResponse(true, Messages.invitationSent());
+    }
 }

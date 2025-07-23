@@ -10,4 +10,5 @@ export const Messages = {
   verify: () => 'We’ve sent you a verification email. Please check your inbox to complete the signup process.',
   verified: () => 'Your email has been verified successfully!',
   loggedIn: () => `You are loggedIn successfully!`,
+  invitationSent: () => `Invitation sent successfully!`,
 };

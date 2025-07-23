@@ -1,4 +1,3 @@
-import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
@@ -6,10 +5,9 @@ import { PassportModule } from '@nestjs/passport';
 import { RoleModule } from 'src/role/role.module';
 import { UsersModule } from 'src/user/user.module';
 import { AuthController } from './auth.controller';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { OrganizationModule } from 'src/organization/organization.module';
-import { IsEmailUniqueConstraint } from '../common/validators/is-email-unique.validator';
 import { MailModule } from 'src/mail/mail.module';
+import { JwtConfigModule } from 'src/common/modules/jwt-config.module';
+import { OrganizationModule } from 'src/organization/organization.module';
 
 
 @Module({
@@ -19,16 +17,7 @@ import { MailModule } from 'src/mail/mail.module';
     OrganizationModule,
     MailModule,
     PassportModule,
-    JwtModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET'),
-        signOptions: {
-          expiresIn: configService.get<string | number>('JWT_EXPIRES_IN', '3600s'),
-        },
-      }),
-      inject: [ConfigService],
-    }),
+    JwtConfigModule
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],
