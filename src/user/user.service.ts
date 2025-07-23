@@ -54,7 +54,6 @@ export class UsersService {
       { expiresIn: '1d' }
     );
 
-    console.log('invitationToken', invitationToken);
     await this.mailService.sendInvitationEmail(user.email, invitationToken);
   }
 }
